@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>大鱼提示词助手</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="browser-frame">
+      <div class="window-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+
+      <div class="app-grid">
+        <aside class="sidebar compact">
+          <div class="brand-mark" title="大鱼提示词助手">
+            <svg viewBox="0 0 128 128" role="img" aria-label="大鱼提示词助手 Logo">
+              <defs>
+                <linearGradient id="logoBg" x1="20" y1="18" x2="108" y2="112" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#172033" />
+                  <stop offset="1" stop-color="#0A1020" />
+                </linearGradient>
+                <linearGradient id="logoLine" x1="34" y1="35" x2="94" y2="91" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#DDE8FF" />
+                  <stop offset="1" stop-color="#6EA0FF" />
+                </linearGradient>
+              </defs>
+              <rect x="18" y="18" width="92" height="92" rx="24" fill="url(#logoBg)" />
+              <rect x="18.75" y="18.75" width="90.5" height="90.5" rx="23.25" stroke="white" stroke-opacity="0.1" stroke-width="1.5" />
+              <path d="M39 36H61.8C78.8 36 91 47.8 91 64C91 80.2 78.8 92 61.8 92H39V36Z" stroke="url(#logoLine)" stroke-width="9" stroke-linejoin="round" />
+              <path d="M51 49H61.4C70.3 49 76.8 55.2 76.8 64C76.8 72.8 70.3 79 61.4 79H51V49Z" fill="#0F172A" />
+              <path d="M41 76C51.8 65.2 64.2 60.6 78 62.2C84.4 62.9 90 65.1 96 69.4" stroke="#F8FBFF" stroke-width="6" stroke-linecap="round" />
+              <path d="M82 50L99 39.5C101.7 37.8 105 39.8 104.8 43L104 58.5C98.2 53.8 91 51.1 82 50Z" fill="#6EA0FF" />
+              <circle cx="46" cy="55" r="3.8" fill="#8BB6FF" />
+            </svg>
+          </div>
+        </aside>
+
+        <section class="main-area">
+          <header class="hero-row">
+            <div class="hero-brand">
+              <div class="wordmark-logo" aria-hidden="true">DY</div>
+              <div>
+                <h1>大鱼提示词助手</h1>
+                <p>将你的创意转化为电影级视频生成提示词</p>
+              </div>
+            </div>
+
+            <div class="top-actions">
+              <select id="mode" class="native-hidden">
+                <option value="template">模板模式</option>
+                <option value="ai">AI增强</option>
+              </select>
+              <div class="mode-tabs" aria-label="生成模式">
+                <button class="mode-tab" type="button" data-mode="template">模板模式</button>
+                <button class="mode-tab active" type="button" data-mode="ai">✦ AI增强</button>
+              </div>
+              <label class="model-shell">
+                <select id="model">
+                  <option value="deepseek-v4-flash">DeepSeek V4</option>
+                  <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
+                </select>
+              </label>
+              <button id="generateBtn" class="primary-btn" form="promptForm" type="submit">✦ 生成高质量提示词</button>
+            </div>
+          </header>
+
+          <div class="content-grid">
+            <form id="promptForm" class="builder-panel">
+              <section class="step-card">
+                <div class="step-head">
+                  <span class="step-index">1</span>
+                  <h2>简单描述</h2>
+                  <div class="analysis-actions">
+                    <label class="auto-analyze">
+                      <input id="autoAnalyze" type="checkbox" checked />
+                      <span>自动分析</span>
+                    </label>
+                    <button id="analyzeBtn" class="analysis-btn" type="button">AI分析设定</button>
+                  </div>
+                </div>
+                <div class="textarea-wrap">
+                  <textarea
+                    id="brief"
+                    maxlength="300"
+                    rows="5"
+                    placeholder="例如：一个女孩在医院冷库里，开始以为是恶作剧，后来发现是真的，被恐惧和绝望击垮，最后流泪崩溃。"
+                  ></textarea>
+                  <span id="briefCount">0 / 300</span>
+                </div>
+                <div id="analysisSummary" class="analysis-summary">
+                  <strong>AI理解设定</strong>
+                  <p>输入描述后，系统会识别人物、场景、动作、风格、镜头和阶段设定，并自动回填到下方参数。</p>
+                </div>
+              </section>
+
+              <section class="step-card">
+                <div class="step-head">
+                  <span class="step-index">2</span>
+                  <h2>风格预设</h2>
+                </div>
+                <select id="look" class="native-hidden">
+                  <option value="cinematic">电影级写实</option>
+                  <option value="noir">暗调悬疑</option>
+                  <option value="soft">清新自然</option>
+                  <option value="commercial">商业广告</option>
+                  <option value="documentary">纪录片风格</option>
+                </select>
+                <div class="preset-strip" aria-label="风格预设">
+                  <button class="preset-card active cinematic" type="button" data-look="cinematic">
+                    <img src="./assets/style-cinematic.png" alt="电影级写实风格预览" />
+                    <span class="check">✓</span>
+                    <strong>电影级写实</strong>
+                  </button>
+                  <button class="preset-card noir" type="button" data-look="noir">
+                    <img src="./assets/style-noir.png" alt="暗调悬疑风格预览" />
+                    <strong>暗调悬疑</strong>
+                  </button>
+                  <button class="preset-card soft" type="button" data-look="soft">
+                    <img src="./assets/style-soft.png" alt="清新自然风格预览" />
+                    <strong>清新自然</strong>
+                  </button>
+                  <button class="preset-card commercial" type="button" data-look="commercial">
+                    <img src="./assets/style-commercial.png" alt="商业广告风格预览" />
+                    <strong>商业广告</strong>
+                  </button>
+                  <button class="preset-card documentary" type="button" data-look="documentary">
+                    <img src="./assets/style-documentary.png" alt="纪录片风格预览" />
+                    <strong>纪录片风格</strong>
+                  </button>
+                </div>
+
+                <div class="param-grid">
+                  <label class="select-tile">
+                    <span>摄影机</span>
+                    <select id="cameraVisual">
+                      <option>ARRI Alexa 65</option>
+                      <option>ARRI Alexa Mini LF</option>
+                      <option>Sony Venice 2</option>
+                      <option>RED V-Raptor</option>
+                    </select>
+                  </label>
+                  <label class="select-tile">
+                    <span>镜头焦段</span>
+                    <select id="lensVisual">
+                      <option>50mm</option>
+                      <option>35mm</option>
+                      <option>65mm</option>
+                      <option>85mm</option>
+                    </select>
+                  </label>
+                  <label class="select-tile">
+                    <span>画面色调</span>
+                    <select id="toneVisual">
+                      <option>冷峻蓝灰（青橙冷极）</option>
+                      <option>高级低饱和商业色调</option>
+                      <option>柔和自然低饱和</option>
+                      <option>低照度暗调高反差</option>
+                    </select>
+                  </label>
+                  <label class="select-tile">
+                    <span>光线环境</span>
+                    <select id="lightVisual">
+                      <option>顶部冷白荧光灯</option>
+                      <option>侧前方柔光</option>
+                      <option>自然环境光</option>
+                      <option>方向性顶光与逆光</option>
+                    </select>
+                  </label>
+                </div>
+              </section>
+
+              <section class="step-card">
+                <div class="step-head split">
+                  <div>
+                    <span class="step-index">3</span>
+                    <h2>情绪 / 动作阶段</h2>
+                    <em>可选</em>
+                  </div>
+                  <label class="stage-mode">
+                    <span>阶段数量</span>
+                    <select id="stageMode">
+                      <option value="none">不使用</option>
+                      <option value="simple">2 段</option>
+                      <option value="full" selected>4 段</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="emotion-flow">
+                  <label class="emotion-chip stage-start">
+                    <span class="phase-mark">01</span>
+                    <input id="emotionStart" type="text" value="难以置信的浅笑" />
+                    <small>0 - 2 秒</small>
+                  </label>
+                  <b></b>
+                  <label class="emotion-chip stage-mid">
+                    <span class="phase-mark">02</span>
+                    <input id="emotionMiddle" type="text" value="尴尬与不安" />
+                    <small>2 - 5 秒</small>
+                  </label>
+                  <b class="stage-mid-arrow"></b>
+                  <label class="emotion-chip stage-impact">
+                    <span class="phase-mark">03</span>
+                    <input id="impactEmotion" type="text" value="现实冲击" />
+                    <small>5 - 9 秒</small>
+                  </label>
+                  <b class="stage-impact-arrow"></b>
+                  <label class="emotion-chip stage-end">
+                    <span class="phase-mark">04</span>
+                    <input id="emotionEnd" type="text" value="绝望崩溃" />
+                    <small>9 - 15 秒</small>
+                  </label>
+                </div>
+                <p class="stage-note">不需要情绪递进时选择“不使用”，系统只会控制动作、镜头和画面质感。</p>
+              </section>
+
+              <section class="step-card">
+                <div class="step-head">
+                  <span class="step-index">4</span>
+                  <h2>其他设置</h2>
+                  <em>可选</em>
+                </div>
+                <div class="setting-chips">
+                  <label class="setting-chip">
+                    <span>画面比例</span>
+                    <select id="ratioVisual"><option>16:9</option><option>9:16</option><option>1:1</option></select>
+                  </label>
+                  <label class="setting-chip">
+                    <span>视频时长</span>
+                    <select id="duration">
+                      <option value="15">15 秒</option>
+                      <option value="10">10 秒</option>
+                      <option value="8">8 秒</option>
+                      <option value="6">6 秒</option>
+                    </select>
+                  </label>
+                  <label class="setting-chip">
+                    <span>镜头语言</span>
+                    <select id="motionVisual"><option>连续长镜头</option><option>缓慢推进</option><option>轻微手持</option></select>
+                  </label>
+                  <label class="setting-chip">
+                    <span>焦点锁定</span>
+                    <select id="focus">
+                      <option value="face">面部微表情</option>
+                      <option value="eyes">眼神变化</option>
+                      <option value="body">身体动作</option>
+                      <option value="object">手部与道具</option>
+                    </select>
+                  </label>
+                  <label class="setting-chip">
+                    <span>负面约束</span>
+                    <input id="extra" type="text" value="不跳切，不夸张" />
+                  </label>
+                  <button id="sampleBtn" class="icon-btn" type="button" title="填入示例">示例</button>
+                  <button id="clearBtn" class="icon-btn" type="button" title="清空">清空</button>
+                </div>
+              </section>
+
+              <div class="native-hidden">
+                <input id="subject" type="text" />
+                <input id="setting" type="text" />
+                <input id="appearance" type="text" />
+                <input id="action" type="text" />
+              </div>
+            </form>
+
+            <section class="result-panel">
+              <div class="result-card">
+                <div id="loadingOverlay" class="loading-overlay" aria-hidden="true">
+                  <div class="loader-orb"></div>
+                  <strong id="loadingTitle">AI 正在处理</strong>
+                  <span id="loadingText">正在理解你的描述并生成高控制力提示词</span>
+                </div>
+                <div class="result-head">
+                  <div>
+                    <h2>生成结果</h2>
+                    <span id="status" class="status">已完成</span>
+                  </div>
+                  <div class="result-tools">
+                    <label class="format-shell">
+                      <span>输出格式</span>
+                      <select id="outputFormat">
+                        <option value="text">文案提示词</option>
+                        <option value="seedance" selected>Seedance 2.0专用</option>
+                        <option value="json">JSON结构</option>
+                        <option value="both">双格式</option>
+                      </select>
+                    </label>
+                    <span>提示词字数 <strong id="wordCount">1,286</strong></span>
+                    <button id="regenerateBtn" type="button">✦ 重新生成</button>
+                    <button id="copyBtn" type="button">⧉ 复制结果</button>
+                  </div>
+                </div>
+                <textarea id="output" class="output" spellcheck="false"></textarea>
+              </div>
+
+              <aside class="tip-box">
+                <strong>☼ 提示</strong>
+                <p>AI 已基于你的描述和预设，生成高控制力提示词。你可以直接复制使用，或在此基础上微调。</p>
+              </aside>
+            </section>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
