@@ -7,7 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node local-server.js",
     "test:quality": "node quality-check.mjs"
   }
 }
