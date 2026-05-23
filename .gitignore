@@ -4,3 +4,4 @@ node_modules/
 *.log
 video-prompt-tool.zip
 prompt-tool-preview.png
+.vercel
