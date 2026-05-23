@@ -203,7 +203,12 @@ function sanitizeSeedancePrompt(prompt) {
     .replace(/更换镜头/g, "画面断开")
     .replace(/\b(35mm|50mm|85mm)\b/gi, "固定焦段")
     .replace(/光圈[^，。\n]*/g, "清晰稳定")
-    .replace(/快门[^，。\n]*/g, "运动自然");
+    .replace(/快门[^，。\n]*/g, "运动自然")
+    .replace(/Stable Diffusion|SDXL|ControlNet|CFG|sampler|steps/gi, "")
+    .replace(/采样器|步数/g, "")
+    .replace(/^\s*[-*]?\s*(模型参数|生成参数|技术参数)[：:].*$/gim, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function normalizeAnalyzedSettings(settings, input) {
